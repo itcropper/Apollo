@@ -1,0 +1,31 @@
+{
+  "name": "Konch",
+  "version": "0.0.0",
+  "description": "Distributed Relevancy",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "\"news\"",
+    "\"location\"",
+    "\"relevance\"",
+    "\"relevancy\""
+  ],
+  "author": "Ian Cropper",
+  "license": "BSD-2-Clause",
+  "dependencies": {
+    "body-parser": "^1.12.2",
+    "consolidate": "^0.11.0",
+    "cookie-parser": "^1.3.4",
+    "express": "^4.12.2",
+    "express-session": "^1.10.4",
+    "fs": "0.0.2",
+    "method-override": "^2.3.2",
+    "mongoose": "^3.8.25",
+    "node-restful": "^0.1.18",
+    "passport": "^0.2.1",
+    "passport-local": "^1.0.0",
+    "router": "^1.0.0"
+  }
+}
