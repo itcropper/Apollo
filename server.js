@@ -16,6 +16,7 @@ var MONGOOSE_PORT =
   process.env.MONGOHQ_URL  || 
   'mongodb://localhost:27017;';
 
+// CONFIG
 mongoose.connect(MONGOOSE_PORT, function (err, res) {
   if (err) { 
     console.log ('ERROR connecting to: ' + MONGOOSE_PORT + '. ' + err);
@@ -24,15 +25,11 @@ mongoose.connect(MONGOOSE_PORT, function (err, res) {
   }
 });
 
-
-app.configure(function () {
-    app.use(allowCrossDomain);
-    app.use(bodyParser.urlencoded({extended: true}));
-    app.use(bodyParser.json());
-    app.set('view engine', 'ejs');
-}
-
-var allowCrossDomain = function(req, res, next) {
+app.use(allowCrossDomain);
+app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.json());
+app.set('view engine', 'ejs');
+function allowCrossDomain(req, res, next) {
     res.header('Access-Control-Allow-Origin', '*');
     res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
     res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With');
@@ -45,7 +42,9 @@ var allowCrossDomain = function(req, res, next) {
       next();
     }
 };
+// /CONFIG
 
+//load router
 app.use('/api/v1.1.0/', require('./routes/routes')); 
 
 //TESTING PAGES
