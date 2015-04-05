@@ -1,0 +1,47 @@
+<script src="http://code.jquery.com/jquery-latest.min.js"
+        type="text/javascript"></script>
+
+<script>
+    
+function getLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function(position){
+            $('[name=lat]').val(position.coords.latitude);
+            $('[name=lon]').val(position.coords.longitude); 
+        });
+    } 
+}
+getLocation();
+
+</script>
+
+
+<style>
+    label{ display:block;}
+</style>
+
+<form method="post" enctype="multipart/form-data" action="/api/v1.1.0/horn">
+    
+    <label for="nameinput">Name</label>
+    <input name="name" type="text" class="name" value="crash on 36" id="nameinput"/>
+    <label for="dateinput">date</label>
+    <input name="date" type="text" class="date" value="2015-4-1" id="dateInput"/>
+    <label for="latnput">latitude</label>
+    <input name="lat" type="number" step="any" class="lat" id="latInput"/>
+    <label for="loninput">Longitude</label>
+    <input name="lon" type="number"  step="any" class="lon" id="lonInput"/>
+    <label for="tagsinput">Tags</label>
+    <input name="tags" class="tags" placeholder="Separated by commas" id="tagsinput"/>
+    <br />
+    <br />
+    <label for="FileBox">Choose A File: </label><input name="eventVideo" type="file" id="FileBox"><br>
+
+    
+    
+    
+    
+    <br />
+    <br />
+    <button type="submit" class='Button'>Upload</button>
+
+</form>

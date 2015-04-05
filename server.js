@@ -2,20 +2,54 @@ var express = require('express'),
     mongoose = require('mongoose'),
     nodeRestful = require('node-restful'),
     bodyParser = require('body-parser'),
-    app = express();
+    authController = require('./routes/auth'),
+    app = express(),
+    busboy = require('connect-busboy');
 
-mongoose.connect('mongodb://localhost:27017;');
+app.use(busboy()); 
 
-app.use(bodyParser.urlencoded({extended: true}));
-app.use(bodyParser.json());
 
-app.use('/api', require('./routes/api')); 
+//Port Variables
+var SERVER_PORT = Number(process.env.PORT || 3000);
+var MONGOOSE_PORT =
+  process.env.MONGOLAB_URI || 
+  process.env.MONGOHQ_URL  || 
+  'mongodb://localhost:27017;';
 
-app.get('/', function(req, res){
-   res.send('index'); 
+mongoose.connect(MONGOOSE_PORT, function (err, res) {
+  if (err) { 
+    console.log ('ERROR connecting to: ' + uristring + '. ' + err);
+  } else {
+    console.log ('Succeeded connected to: ' + uristring);
+  }
 });
 
 
 
-app.listen(3000);
-console.log('listening on 3000');
+app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.json());
+app.set('view engine', 'ejs');
+
+app.use('/api/v1.1.0/', require('./routes/routes')); 
+
+//TESTING PAGES
+app.get('/create', function(req, res) {
+    res.sendFile(__dirname + '/public/views/create.html');
+});
+
+app.get('/view', function(req, res){
+    res.sendFile(__dirname + '/public/views/viewMap.html');
+});
+
+app.get('/login', function(req, res) {
+  res.json({ user : req.user });
+});
+
+app.get('/views/:id', function(req, res){
+    res.send('something');
+});
+
+
+app.listen(SERVER_PORT, function(e){
+    console.log('listening on port ' + SERVER_PORT); 
+});

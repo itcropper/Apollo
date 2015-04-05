@@ -1,52 +1,34 @@
-var passport = require('passport');
-var Account = require('.././models/user'),
-    bodyParser = require('body-parser'),
-    LocalStrategy = require('passport-local').Strategy;
+var passport = require('passport'),
+    app = require('express')(),
+    LocalStrategy = require('passport-local').Strategy,
+    auth = require('./auth'),
+    horn = require('../models/horn'),
+    user = require('../models/user'),
+    router = require('router')();
 
 
 
-module.exports = function (app) {
-    
-app.use(bodyParser());
-    
-    console.log('setting up even??');
+/* PUBLIC ROUTES */
 
-  app.get('/', function (req, res) {
-      res.send('lets get registered!');
-  });
+router.post('/login', auth.login);
 
-  app.get('/register', function(req, res) {
-      res.render('register', { });
-  });
+/* ROUTES FOR AUTHENTICATED USERS */
 
-  app.post('/register', function(req, res) {
-      console.log('registering');
-      Account.register(new Account({ username : req.body.username }), req.body.password, function(err, account) {
-        if (err) {
-            return res.send("error");
-        }
+//events
+router.get('/horns', horn.getAll);
+router.get('/horns/:id', horn.getOne);
+router.get('/users/:id/horns', horn.getAllHornsByUser);
+router.post('/horn', horn.createNew);
+router.put('/horn', horn.update);
+router.delete('/horn/:id', horn.delete);
 
-        passport.authenticate('local')(req, res, function () {
-          res.send('ok');
-        });
-    });
-  });
+//users
+//router.get('/user', user.getAll);
+//router.get('/user/:id', user.getOne);
+//router.post('/user', user.createNew);
+//router.put('/user/:id', user.update);
+//router.delete('/user', user.delete);
 
-  app.get('/login', function(req, res) {
-      res.render('login', { user : req.user });
-  });
 
-  app.post('/login', passport.authenticate('local'), function(req, res) {
-      res.redirect('/');
-  });
-
-  app.get('/logout', function(req, res) {
-      req.logout();
-      res.redirect('/');
-  });
-
-  app.get('/ping', function(req, res){
-      res.send("pong!", 200);
-  });
-
-};
+module.exports = router;
+ 
