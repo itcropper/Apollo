@@ -75,6 +75,10 @@ module.exports = {
             tempFilePath = '',
             fstream = {};
         
+        console.log('*******************************************************************');
+        console.log(__dirname, appDir);
+        console.log('///////////////////////////////////////////////////////////////////');
+        
         tempFilePath = appDir + "/assets/Video/"+id + ".MP4";
         
         req.pipe(req.busboy);
