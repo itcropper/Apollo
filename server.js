@@ -33,6 +33,7 @@ app.set('view engine', 'ejs');
 app.use('/api/v1.1.0/', require('./routes/routes')); 
 
 //TESTING PAGES
+app.use('/js', express.static(__dirname + '/public/scripts'));
 app.get('/create', function(req, res) {
     res.sendFile(__dirname + '/public/views/create.html');
 });
