@@ -18,9 +18,9 @@ var MONGOOSE_PORT =
 
 mongoose.connect(MONGOOSE_PORT, function (err, res) {
   if (err) { 
-    console.log ('ERROR connecting to: ' + uristring + '. ' + err);
+    console.log ('ERROR connecting to: ' + MONGOOSE_PORT + '. ' + err);
   } else {
-    console.log ('Succeeded connected to: ' + uristring);
+    console.log ('Succeeded connected to: ' + MONGOOSE_PORT);
   }
 });
 
