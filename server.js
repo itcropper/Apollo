@@ -29,6 +29,7 @@ app.use(allowCrossDomain);
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 app.set('view engine', 'ejs');
+
 function allowCrossDomain(req, res, next) {
     res.header('Access-Control-Allow-Origin', '*');
     res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
@@ -49,12 +50,17 @@ app.use('/api/v1.1.0/', require('./routes/routes'));
 
 //TESTING PAGES
 app.use('/js', express.static(__dirname + '/public/scripts'));
+//app.use('/Videos', express.static(__dirname + '/assets/Videos'));
 app.get('/create', function(req, res) {
     res.sendFile(__dirname + '/public/views/create.html');
 });
 
 app.get('/view', function(req, res){
     res.sendFile(__dirname + '/public/views/viewMap.html');
+});
+
+app.get('/Videos/:id', function(req, res){
+    res.sendFile(__dirname + '/assets/Video/' + req.params.id);
 });
 
 app.get('/login', function(req, res) {

@@ -14,15 +14,18 @@ var mongoose = require('mongoose'),
     path = require('path'),
     appDir = path.dirname(require.main.filename);
 
+
 app.use(busboy()); 
+
+
 
 //fileconfig
 app.use(bodyParser.json());
-AWS.config.update({
-    accessKeyId: process.env.AWS_ACCESS_KEY_ID, 
-    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-    region: 'us-west-1'
-});
+//AWS.config.update({
+//    accessKeyId: process.env.AWS_ACCESS_KEY_ID, 
+//    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+//    region: 'us-west-1'
+//});
 
 
 var BucketName = "atlasappeventvideos";
@@ -72,7 +75,7 @@ module.exports = {
             tempFilePath = '',
             fstream = {};
         
-        tempFilePath = appDir + "/assets/Temp/"+id + ".MP4";
+        tempFilePath = appDir + "/assets/Video/"+id + ".MP4";
         
         req.pipe(req.busboy);
         
@@ -101,10 +104,10 @@ module.exports = {
             ev.author_id = params.author_id;
             ev.created = new Date();
             ev.tags = params.tags;
-            ev.path = "https://s3-us-west-2.amazonaws.com/atlasappeventvideos/"+id+".MP4";
+            ev.path = req.protocol + "://" + req.headers.host + "/Videos/" + id + ".MP4";
 
             //call async
-            setTimeout(function(){ sendVideoToAWS(id, tempFilePath); }, 0);
+            //setTimeout(function(){ sendVideoToAWS(id, tempFilePath); }, 0);
 
             //save to mongo
             ev.save(function(err, a){
@@ -113,12 +116,12 @@ module.exports = {
             });
 
             //delete temp file after 5 minutes
-            setTimeout(function(){
-                fs.unlink(tempFilePath, function (err) {
-                    if (err) console.log(err);
-                        console.log('successfully deleted ' + tempFilePath);
-                }, 1000 * 60 * 5);
-            });
+//            setTimeout(function(){
+//                fs.unlink(tempFilePath, function (err) {
+//                    if (err) console.log(err);
+//                        console.log('successfully deleted ' + tempFilePath);
+//                }, 1000 * 60 * 5);
+//            });
         });     
 
     },
