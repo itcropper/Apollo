@@ -18,7 +18,10 @@ app.use(busboy());
 
 //fileconfig
 app.use(bodyParser.json());
-AWS.config.loadFromPath('AWSConfig.json');
+AWS.config.update({
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID, 
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
+});
 
 
 var BucketName = "atlasappeventvideos";
