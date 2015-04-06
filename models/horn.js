@@ -11,8 +11,7 @@ var mongoose = require('mongoose'),
     zlib = require('zlib'),
     multer = require('multer'),
     busboy = require('connect-busboy'),
-    path = require('path'),
-    appDir = path.dirname(require.main.filename);
+    path = require('path');
 
 app.use(busboy()); 
 
