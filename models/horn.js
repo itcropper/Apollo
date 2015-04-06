@@ -13,6 +13,12 @@ var mongoose = require('mongoose'),
     busboy = require('connect-busboy'),
     path = require('path');
 
+//create temp directory if it doesnt exist
+var temp_dir = path.join(process.cwd(), 'tmp/');
+
+if (!fs.existsSync(temp_dir))
+    fs.mkdirSync(temp_dir);
+
 app.use(busboy()); 
 
 //fileconfig
@@ -71,7 +77,7 @@ module.exports = {
             tempFilePath = '',
             fstream = {};
         
-        tempFilePath = path.join(__dirname, '../', 'assets/Video/'+id + '.MP4');
+        tempFilePath = path.join(temp_dir, id + '.MP4');
         
         console.log(tempFilePath);
         
