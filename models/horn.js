@@ -72,7 +72,7 @@ module.exports = {
             tempFilePath = '',
             fstream = {};
         
-        tempFilePath = appDir + "/assets/Video/"+id + ".MP4";
+        tempFilePath = "assets/Video/"+id + ".MP4";
         
         req.pipe(req.busboy);
         
@@ -134,6 +134,7 @@ module.exports = {
 
 function sendVideoToAWS(id, path) {
     var body = fs.createReadStream(path);
+    console.log(path);
     var s3obj = new AWS.S3({
             params: {
                 Bucket: BucketName, 
