@@ -12,7 +12,11 @@
   </head>
   <body>
 <div id="map-canvas"></div>
-
+      <video width="320" height="240" controls>
+  <source  type="video/mp4">
+  <source src="movie.ogg" type="video/ogg">
+Your browser does not support the video tag.
+</video>
       
   </body>
 
@@ -65,10 +69,9 @@
         initialize();
         
         function setUrlClick(marker) {
-            console.log(marker.link);
-            window.location.href = marker.link;
-            console.log(location.href);
-            
+            $('video source').attr('src', marker.link);
+            $("video")[0].load();
+            $('video')[0].play();
         }
             
 

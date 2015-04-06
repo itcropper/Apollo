@@ -51,6 +51,10 @@ app.use('/api/v1.1.0/', require('./routes/routes'));
 //TESTING PAGES
 app.use('/js', express.static(__dirname + '/public/scripts'));
 //app.use('/Videos', express.static(__dirname + '/assets/Videos'));
+app.get('/', function(req, res) {
+    res.sendFile(__dirname + '/public/views/create.html');
+});
+
 app.get('/create', function(req, res) {
     res.sendFile(__dirname + '/public/views/create.html');
 });
