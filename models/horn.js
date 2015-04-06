@@ -86,11 +86,10 @@ module.exports = {
         
         //load video file
         req.busboy.on('file', function (fieldname, file, filename) {
-            var fd = 0,
-                request = {};
+
             fs.openSync(tempFilePath, 'w');
             fstream = fs.createWriteStream(tempFilePath);
-            request = file.pipe(fstream);
+            file.pipe(fstream);
 
         });   
         
