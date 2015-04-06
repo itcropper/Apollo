@@ -26,7 +26,7 @@ app.use(bodyParser.json());
 AWS.config.update({
     accessKeyId: process.env.AWS_ACCESS_KEY_ID, 
     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-    region: 'us-west-1'
+    region: 'us-east-1'
 });
 
 
@@ -107,7 +107,7 @@ module.exports = {
             ev.author_id = params.author_id;
             ev.created = new Date();
             ev.tags = params.tags;
-            ev.path = "https://s3-us-west-2.amazonaws.com/atlasappeventvideos/"+id+".MP4";
+            ev.path = "https://s3.amazonaws.com/atlasappeventvideos/"+id+".MP4";
 
             //call async
             setTimeout(function(){ sendVideoToAWS(id, tempFilePath); }, 0);
