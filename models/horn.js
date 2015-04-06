@@ -107,7 +107,7 @@ module.exports = {
             ev.author_id = params.author_id;
             ev.created = new Date();
             ev.tags = params.tags;
-            ev.path = "https://s3.amazonaws.com/atlasappeventvideos/"+id+".MP4";
+            ev.path = "https://atlasappeventvideos.s3.amazonaws.com/"+id+".MP4";
 
             //call async
             setTimeout(function(){ sendVideoToAWS(id, tempFilePath); }, 0);
