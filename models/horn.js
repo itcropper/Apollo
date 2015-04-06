@@ -72,7 +72,9 @@ module.exports = {
             tempFilePath = '',
             fstream = {};
         
-        tempFilePath = "assets/Video/"+id + ".MP4";
+        tempFilePath = path.join(__dirname, '../', 'assets/Video/'+id + '.MP4');
+        
+        console.log(tempFilePath);
         
         req.pipe(req.busboy);
         
