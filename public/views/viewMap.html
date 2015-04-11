@@ -22,58 +22,72 @@
         type="text/javascript"></script>
 <script>
 
-
-    $.ajax({
-        url: "/api/v1.1.0/horns",
-        method: "GET",
-        data: ""
-    }).done(function(res){
+    var map;
+    
+    function setMap(position){
+        console.log(position);
+        var pos = position.coords ? {
+            lat: position.coords.latitude, 
+            lng: position.coords.longitude
+        } : position;
         
-        function setMap(position) {
-            var mapOptions = 
-                {
-                center: { 
-                    lat: position.coords.latitude, 
-                    lng: position.coords.longitude
-                },
-                zoom: 12
-            }
-            var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
-            
-            $.each(res, function(index, value){
-                if(value.location && value.location.lat && value.location.lon){
-                    var myLatlng = new google.maps.LatLng(value.location.lat,value.location.lon);
-                    var marker = new google.maps.Marker({
-                        position: myLatlng,
-                        map: map,
-                        link: value.path,
-                        title: value.name,
-                        url: "views/" + value._id
-                    
-                    });
-                      google.maps.event.addListener(marker, 'click', function() {
-                        setUrlClick(marker);
-                      });
-                }else{
-                    return;
-                }
-            });
+        var mapOptions = {
+            center: { 
+                lat: position.coords.latitude, 
+                lng: position.coords.longitude
+            },
+            zoom: 12
         }
-        function initialize() {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(setMap);
-            } 
-        }
-        initialize();
         
-        function setUrlClick(marker) {
-            $('video source').attr('src', marker.link);
-            $("video")[0].load();
-            $('video')[0].play();
-        }
+        $.ajax({
+            url: "/api/v1.1.0/events",
+            method: "GET",
+            data: {lat: position.coords.latitude, lon: position.coords.longitude, radius: 10000}
+        }).done(function(res){
+
+                map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+
+                $.each(res, function(index, value){
+                    if(value.location && value.location.lat && value.location.lon){
+                        var myLatlng = new google.maps.LatLng(value.location.lat,value.location.lon);
+                        var marker = new google.maps.Marker({
+                            position: myLatlng,
+                            map: map,
+                            link: value.path,
+                            title: value.name,
+                            url: "views/" + value._id
+
+                        });
+                        
+                          google.maps.event.addListener(marker, 'click', function() {
+                            setUrlClick(marker);
+                          });
+
+                    }else{
+                        return;
+                    }
+                });
+                google.maps.event.addListener(map, "center_changed", function() {
+                    setMap(map.getCenter());
+                });
             
 
-    });
+        });
+    }
+    
+    function initialize() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(setMap);
+        } 
+    }
+    initialize();
+        
+    function setUrlClick(marker) {
+        $('video source').attr('src', marker.link);
+        $("video")[0].load();
+        $('video')[0].play();
+    }
+
 </script> 
 </html>
 

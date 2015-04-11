@@ -1,15 +1,40 @@
-var mongoose = require('mongoose'),
-    bcrypt = require('bcrypt-nodejs');
+// Load required packages
+var mongoose = require('mongoose');
+var bcrypt = require('bcrypt-nodejs');
 
 var UserSchema = new mongoose.Schema({
-    name_first: String, 
-    name_last: String,
-    email: String,
-    password: String,
+
+    name_first: {
+        type: String, 
+        required: true
+    },
+    name_last: {
+        type: String, 
+        required: true
+    },
+    username: {
+        type: String,
+        unique: true,
+        required: true
+    },
+    email: {
+        type: String, 
+        required: true,
+        unique: true
+    },
     age: Number,
     gender: String,
     created: Date,
-    api_token: String
+    lastModified: Date,
+    followers: [{ 
+            type :String
+    }],
+    following: [{ 
+        type : String //userIds
+    }],    password: {
+        type: String, 
+        required: true
+    }
 });
 
 // Execute before each user.save() call
@@ -38,6 +63,5 @@ UserSchema.methods.verifyPassword = function(password, cb) {
   });
 };
 
-var GooseUser = mongoose.model('user', UserSchema);
-
-module.exports = GooseUser;
+// Export the Mongoose model
+module.exports = mongoose.model('User', UserSchema);

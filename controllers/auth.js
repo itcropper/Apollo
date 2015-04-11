@@ -1,4 +1,3 @@
-// Load required packages
 var passport = require('passport');
 var BasicStrategy = require('passport-http').BasicStrategy;
 var User = require('../models/user');
@@ -25,14 +24,4 @@ passport.use(new BasicStrategy(
   }
 ));
 
-exports.login = function(req, res){
-    res.send('logged in');
-}
-
-exports.isAuthenticated = passport.authenticate('basic', 
-  { 
-    failureFlash: JSON.stringify(
-        {
-            "errors": "user not found"
-        })
-  });
+exports.isAuthenticated = passport.authenticate('basic', { session : false });
