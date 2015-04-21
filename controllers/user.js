@@ -1,9 +1,9 @@
 // Load required packages
-var User = require('../models/user');
+var User = require('../models/user'),
+    jsonResult = require('../jsonResult').Response;
 
 // Create endpoint /api/users for POST
 exports.createNewUser = function(req, res) {
-    
     
     var user = new User();
 
@@ -13,7 +13,8 @@ exports.createNewUser = function(req, res) {
     if(req.body.username){
         user.username = req.body.username
     }else{
-        res.send('must provide a valid username');   
+        res.json(jsonResult('', "fail", 'must provide a valid username'));
+        return;
     }
 
     if(req.body.email) { 
@@ -26,16 +27,16 @@ exports.createNewUser = function(req, res) {
     user.gender = req.body.gender;
     user.password = req.body.password;
     
-    console.log(user);
-
     user.save(function(err) {
         if (err){
-            res.json({"message" : "there was an error", "error" : err});
+            console.log(err);
+            res.json(jsonResult("", "Fail", err));
             return;
         }
-        res.json({ message: 'New beer drinker added to the locker room!' });
+        console.log('userCreated', new Date());
+        res.json(jsonResult('Account Successfully Created', "success"));
     });
-};
+}
 
 // Create endpoint /api/users for GET
 exports.getUsers = function(req, res) {

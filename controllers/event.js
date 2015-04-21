@@ -30,21 +30,34 @@ AWS.config.update({
     region: 'us-east-1'
 });
 
+exports.getFeed = function(req, res){
+    var params, twoWeeksAgo, page;
+    
+    params = url.parse(req.url, true).query;
+    
+    page = params.page;
+    
+    twoWeeksAgo = new Date(new Date() - 1000 * 60 * 60 * 24 * 14);
+    
+    Event.find(
+        {
+            
+        }
+    );
+}
+
 //this request should always require a lat/lon as a center, and a radius (meters?)
 exports.getAll  = function(req, res){ 
     var params, lat, lon, radius, twoWeeksAgo;
     
     params = url.parse(req.url, true).query;
     
-    twoWeeksAgo = new Date(new Date() - 1000 * 60 * 60 * 24 * 14);
+    twoWeeksAgo = new Date(new Date() - 1000 * 60 * 60 * 24 * 28);
     
     lat = params.lat;
     lon = params.lon;
     radius = params.radius || 5000;
-    
-    console.log('IT WORKS!!!!!!!!!!!!');
-    
-     
+
     Event.find(
     {
         $and: [
@@ -64,7 +77,8 @@ exports.getAll  = function(req, res){
     })
     .limit(5)
     .exec(function(err, events){
-        res.send(jsonResult(events));
+        console.log("SENDING EVENTS******");
+        res.json(jsonResult(events, "success"));
     });
 }
 
@@ -81,7 +95,7 @@ exports.getAllHornsByUser = function(req, res){
 }
 exports.createNew = function(req, res){
     var ev = new Event(),
-        id = guid(),
+        id = guid() +  new Date().getTime(),
         tempFilePath = '',
         fstream = {};
 
@@ -96,13 +110,12 @@ exports.createNew = function(req, res){
     });
 
     //load video file
-    req.busboy.on('file', function (fieldname, file, filename) {
-
+    function loadFileIntoTempDirectory(fieldname, file, filename){
         fs.openSync(tempFilePath, 'w');
         fstream = fs.createWriteStream(tempFilePath);
         file.pipe(fstream);
-
-    });   
+    }
+    req.busboy.on('file',  loadFileIntoTempDirectory);
 
     req.busboy.on('finish', function() {
 

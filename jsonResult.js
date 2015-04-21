@@ -1,7 +1,8 @@
-exports.Response = function(data){
+exports.Response = function(data, status, err){
     var res = {
         "links": {},
-        "errors": {},
+        "errors": err || {},
+        "status": status || "",
         "data" : data
     };
     
