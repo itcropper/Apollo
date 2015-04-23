@@ -3,10 +3,7 @@ var mongoose = require('mongoose'),
 
 var EventSchema = new Schema({
     name: String,
-    location:{
-        type: { type: String }, 
-        coordinates: []
-    },
+    location:[Number],
     description : {
         type: String
     },
