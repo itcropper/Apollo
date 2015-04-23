@@ -121,8 +121,7 @@ exports.createNew = function(req, res){
 
         //save data to mongo object
         ev.name = params.name;
-        ev.location.lat = params.lat;
-        ev.location.lon = params.lon;
+        ev.location = [params.lon,  params.lat];
         ev.author_id = params.author_id;
         ev.created = new Date();
         ev.tags = params.tags;
