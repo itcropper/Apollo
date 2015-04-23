@@ -130,6 +130,8 @@ exports.createNew = function(req, res){
         //call async
         setTimeout(function(){ sendVideoToAWS(id, tempFilePath); }, 0);
 
+        console.log("\n\n", ev, "\n\n");
+
         //save to mongo
         ev.save(function(err, savedEvent){
            if(err){ console.log(err); return;}
