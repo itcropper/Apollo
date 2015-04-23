@@ -3,7 +3,10 @@ var mongoose = require('mongoose'),
 
 var EventSchema = new Schema({
     name: String,
-    location:[Number],
+    location :{
+        type: [Number],  // [<longitude>, <latitude>]
+        index: '2d'      // create the geospatial index 
+    },
     description : {
         type: String
     },
