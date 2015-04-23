@@ -5,7 +5,7 @@ var EventSchema = new Schema({
     name: String,
     location :{
         type: [Number],  // [<longitude>, <latitude>]
-        index: '2d'      // create the geospatial index 
+        index: '2dsphere'      // create the geospatial index 
     },
     description : {
         type: String
@@ -23,7 +23,6 @@ var EventSchema = new Schema({
     path: String,
     tags: [String] 
 });
-EventSchema.index({ location : '2dsphere' });
 
 // Execute before each user.save() call
 EventSchema.pre('save', function(callback) {
