@@ -67,7 +67,7 @@ exports.getAll  = function(req, res){
                     $nearSphere: {
                         $geometry: {
                             type: "Point",
-                            coordinates: [ lon, lat ],
+                            [ lon, lat ],
                             $maxDistance: radius
                         }
                     }
@@ -77,7 +77,7 @@ exports.getAll  = function(req, res){
     })
     .limit(5)
     .exec(function(err, events){
-        console.log("SENDING EVENTS******");
+        console.log("SENDING EVENTS******", events);
         res.json(jsonResult(events, "success"));
     });
 }
