@@ -54,8 +54,8 @@ exports.getAll  = function(req, res){
     
     twoWeeksAgo = new Date(new Date() - 1000 * 60 * 60 * 24 * 28);
     
-    lat = params.lat;
-    lon = params.lon;
+    lat = parseFloat(params.lat);
+    lon = parseFloat(params.lon);
     radius = params.radius || 5000;
 
     Event.find(
@@ -67,7 +67,7 @@ exports.getAll  = function(req, res){
                     $nearSphere: {
                         $geometry: {
                             type: "Point",
-                            [ lon, lat ],
+                            coordinates : [ lon, lat ],
                             $maxDistance: radius
                         }
                     }
