@@ -32,6 +32,7 @@ EventSchema.pre('save', function(callback) {
   if(!event.created){
       event.created = new Date();
   }
+  return callback();
 });
 
 module.exports = mongoose.model('Event', EventSchema);
