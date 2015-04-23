@@ -16,17 +16,19 @@ var Event = require('../models/event'),
 var temp_dir = path.join(process.cwd(), 'tmp/');
 var BucketName = "atlasappeventvideos";
 
-
 if (!fs.existsSync(temp_dir))
     fs.mkdirSync(temp_dir);
 
 app.use(busboy()); 
 
+var key, secret;
+key = process.env.AWS_ACCESS_KEY_ID ||  "";
+secret = process.env.AWS_SECRET_ACCESS_KEY || "";
 //fileconfig
 app.use(bodyParser.json());
 AWS.config.update({
-    accessKeyId: process.env.AWS_ACCESS_KEY_ID, 
-    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+    accessKeyId: key, 
+    secretAccessKey: secret,
     region: 'us-east-1'
 });
 
@@ -48,6 +50,7 @@ exports.getFeed = function(req, res){
 
 //this request should always require a lat/lon as a center, and a radius (meters?)
 exports.getAll  = function(req, res){ 
+    try{
     var params, lat, lon, radius, twoWeeksAgo;
     
     params = url.parse(req.url, true).query;
@@ -77,15 +80,23 @@ exports.getAll  = function(req, res){
     })
     .limit(5)
     .exec(function(err, events){
-        console.log("SENDING EVENTS******");
         res.json(jsonResult(events, "success"));
     });
+    }catch(e){
+        console.log(e);
+        res.send(jsonResult("", "fail", e);
+    }
 }
 
 exports.getOne = function(req, res){
-    Event.findOne({"_id": req.params.id}, function(err, event){
-        res.send(jsonResult(event));
-    });
+    try{
+        Event.findOne({"_id": req.params.id}, function(err, event){
+            res.send(jsonResult(event));
+        });
+    }catch(e){
+        console.log(e);
+        res.json(jsonResult("", "fail", e);
+    }
 }
 exports.getAllHornsByUser = function(req, res){
     console.log(req.params.id);
@@ -98,6 +109,8 @@ exports.createNew = function(req, res){
         id = guid() +  new Date().getTime(),
         tempFilePath = '',
         fstream = {};
+    
+    try{
 
     tempFilePath = path.join(temp_dir, id + '.MP4');
 
@@ -144,7 +157,11 @@ exports.createNew = function(req, res){
 //                    console.log('Temp Time Expired. Successfully deleted ' + tempFilePath);
 //            }, 1000 * 60 * 5);
 //        });
-    });     
+    });    
+    catch(e){
+        console.log("ERROR: " , e);
+        res.json(jsonResult("", "fail", e);
+    }
 
 }
 exports.update = function(req, res){
