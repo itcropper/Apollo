@@ -52,11 +52,16 @@ exports.getAll  = function(req, res){
     
     params = url.parse(req.url, true).query;
     
-    twoWeeksAgo = new Date(new Date() - 1000 * 60 * 60 * 24 * 28);
+    twoWeeksAgo = new Date(new Date() - 1000 * 60 * 60 * 24 * 7 * 2);
     
-    lat = parseFloat(params.lat);
-    lon = parseFloat(params.lon);
-    radius = params.radius || 5000;
+    if(params.lat && params.lon){
+        lat = parseFloat(params.lat);
+        lon = parseFloat(params.lon);
+        radius = params.radius || 5000;
+    }else{
+        res.json(jsonResult("", "error", "no lat/lon params sent"));
+        return;
+    }
 
     Event.find(
     {
@@ -77,7 +82,6 @@ exports.getAll  = function(req, res){
     })
     .limit(5)
     .exec(function(err, events){
-        console.log("SENDING EVENTS******", events);
         res.json(jsonResult(events, "success"));
     });
 }
@@ -111,6 +115,7 @@ exports.createNew = function(req, res){
 
     //load video file
     function loadFileIntoTempDirectory(fieldname, file, filename){
+        console.log('shouldnt be getting here');
         fs.openSync(tempFilePath, 'w');
         fstream = fs.createWriteStream(tempFilePath);
         file.pipe(fstream);
@@ -118,11 +123,13 @@ exports.createNew = function(req, res){
     req.busboy.on('file',  loadFileIntoTempDirectory);
 
     req.busboy.on('finish', function() {
+        
+        console.log('got it all');
 
         //save data to mongo object
         ev.name = params.name;
         ev.location = [parseFloat(params.lon),  parseFloat(params.lat)];
-        ev.author_id = params.author_id;
+        ev.email = params.email;
         ev.created = new Date();
         ev.tags = params.tags;
         ev.path = "https://atlasappeventvideos.s3.amazonaws.com/"+id+".MP4";
@@ -134,8 +141,9 @@ exports.createNew = function(req, res){
 
         //save to mongo
         ev.save(function(err, savedEvent){
-           if(err){ console.log(err); return;}
-            res.send(jsonResult(savedEvent));
+           if(err){ console.log(err); res.json(jsonResult("", "fail", err)); return;}
+            console.log('saved');
+            res.json(jsonResult(savedEvent));
         });
 
         //delete temp file after 5 minutes
