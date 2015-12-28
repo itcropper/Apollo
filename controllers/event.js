@@ -53,7 +53,7 @@ exports.getAll  = function(req, res){
     
     params = url.parse(req.url, true).query;
     
-    twoWeeksAgo = new Date(new Date() - 1000 * 60 * 60 * 24 * 7 * 2);
+    twoWeeksAgo = new Date(new Date() - 1000 * 60 * 60 * 24 * 7 * 2 * 10);
     
     if(params.lat && params.lon){
         lat = parseFloat(params.lat);
