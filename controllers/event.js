@@ -10,7 +10,8 @@ var Event = require('../models/event'),
     busboy = require('connect-busboy'),
     path = require('path'),
     jsonResult = require('../jsonResult').Response,
-    url = require('url');
+    url = require('url'),
+    transcoder = require('../models/elastic_transcoder');
 
 //create temp directory if it doesnt exist
 var temp_dir = path.join(process.cwd(), 'tmp/');
@@ -25,8 +26,8 @@ app.use(busboy());
 //fileconfig
 app.use(bodyParser.json());
 AWS.config.update({
-    accessKeyId: process.env.AWS_ACCESS_KEY_ID, 
-    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID || "AKIAJI4TVAFIYKO7G5FA",
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || "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",
     region: 'us-east-1'
 });
 
@@ -115,29 +116,24 @@ exports.createNew = function(req, res){
 
     //load video file
     function loadFileIntoTempDirectory(fieldname, file, filename){
-        console.log('shouldnt be getting here');
         fs.openSync(tempFilePath, 'w');
-        fstream = fs.createWriteStream(tempFilePath);
+        fstream = fs.createWriteStream(tempFilePath);  
         file.pipe(fstream);
     }
     req.busboy.on('file',  loadFileIntoTempDirectory);
 
     req.busboy.on('finish', function() {
         
-        console.log('got it all');
-
         //save data to mongo object
         ev.name = params.name;
         ev.location = [parseFloat(params.lon),  parseFloat(params.lat)];
         ev.email = params.email;
         ev.created = new Date();
         ev.tags = params.tags;
-        ev.path = "https://atlasappeventvideos.s3.amazonaws.com/"+id+".MP4";
+        ev.path = "https://s3-us-west-2.amazonaws.com/atlasappeventvideos/Videos/"+id+"/HLS1M.m3u8";
 
         //call async
         setTimeout(function(){ sendVideoToAWS(id, tempFilePath); }, 0);
-
-        console.log("\n\n", ev, "\n\n");
 
         //save to mongo
         ev.save(function(err, savedEvent){
@@ -165,7 +161,6 @@ exports.delete  = function(req, res){
 
 function sendVideoToAWS(id, path) {
     var body = fs.createReadStream(path);
-    console.log(path);
     var s3obj = new AWS.S3({
             params: {
                 Bucket: BucketName, 
@@ -174,5 +169,13 @@ function sendVideoToAWS(id, path) {
             }});
     s3obj.upload({Body: body})
     .on('httpUploadProgress', function(evt) {  })
-    .send(function(err, data) { console.log(err, data) });
+    .send(function(err, data) { 
+        if(err){
+            console.log('error', err);
+            return false;
+        } else {
+            transcoder.createAndRunAWSJob(id);
+        }
+        console.log(err, data);
+    });
 }

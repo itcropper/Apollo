@@ -7,6 +7,7 @@ var EventSchema = new Schema({
         type: [Number],  // [<longitude>, <latitude>]
         index: '2dsphere'      // create the geospatial index 
     },
+    path: {type: String},
     description : {
         type: String
     },
@@ -20,7 +21,7 @@ var EventSchema = new Schema({
     author_id: { type: String, index: true },
     created: Date,
     expires: Date,
-    path: String,
+    mediaPath: String,
     tags: [String] 
 });
 
@@ -35,3 +36,9 @@ EventSchema.pre('save', function(callback) {
 });
 
 module.exports = mongoose.model('Event', EventSchema);
+
+
+/*
+put id in mongo and then recreate the path from a api url to get to the amazon stream
+HLS streaming
+*/
