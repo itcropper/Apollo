@@ -17,6 +17,16 @@ var Event = require('../models/event'),
 var temp_dir = path.join(process.cwd(), 'tmp/');
 var BucketName = "atlasappeventvideos";
 
+var keys;
+
+try {
+    keys = require('../keys')();
+}catch (e){
+    console.log(e);
+    keys = {};
+}
+
+
 
 if (!fs.existsSync(temp_dir))
     fs.mkdirSync(temp_dir);
@@ -26,8 +36,8 @@ app.use(busboy());
 //fileconfig
 app.use(bodyParser.json());
 AWS.config.update({
-    accessKeyId: process.env.AWS_ACCESS_KEY_ID || "AKIAJI4TVAFIYKO7G5FA",
-    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || "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",
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID || keys.key || "",
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || keys.secret  || "",
     region: 'us-east-1'
 });
 
