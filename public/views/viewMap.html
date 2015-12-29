@@ -25,13 +25,11 @@
     var map;
     
     function setMap(position){
-        console.log(position);
         var pos = position.coords ? {
             lat: position.coords.latitude, 
             lng: position.coords.longitude
         } : position;
         
-        console.log(position);
         
         var mapOptions = {
             center: { 
@@ -57,7 +55,7 @@
                         map: map,
                         link: value.path,
                         title: value.name,
-                        url: "https://s3-us-west-2.amazonaws.com/atlasappeventvideos/Videos/"+ value.id +"/HLS1M.m3u8"
+                        url: value.path
 
                     });
 
@@ -84,7 +82,7 @@
         
     function setUrlClick(marker) {
         console.log(marker);
-        $('video source').attr('src', marker.url);
+        $('video source').attr('src', marker.path);
         $("video")[0].load();
         $('video')[0].play();
     }

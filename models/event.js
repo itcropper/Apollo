@@ -7,22 +7,24 @@ var EventSchema = new Schema({
         type: [Number],  // [<longitude>, <latitude>]
         index: '2dsphere'      // create the geospatial index 
     },
-    path: {type: String},
-    description : {
-        type: String
+    streamLinks: {
+        "1m": String,
+        "600k":String
     },
+    thumbnailLink : String,
+    description : String,
     address: {
         street: String,
         city: String,
         state: String,
         zip: String
     },
-    is_private: {type : Boolean},
+    is_private: Boolean,
     author_id: { type: String, index: true },
     created: Date,
     expires: Date,
-    mediaPath: String,
-    tags: [String] 
+    tags: [String],
+    
 });
 
 // Execute before each user.save() call
@@ -36,9 +38,3 @@ EventSchema.pre('save', function(callback) {
 });
 
 module.exports = mongoose.model('Event', EventSchema);
-
-
-/*
-put id in mongo and then recreate the path from a api url to get to the amazon stream
-HLS streaming
-*/

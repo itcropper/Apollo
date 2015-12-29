@@ -130,7 +130,12 @@ exports.createNew = function(req, res){
         ev.email = params.email;
         ev.created = new Date();
         ev.tags = params.tags;
-        ev.path = "https://s3-us-west-2.amazonaws.com/atlasappeventvideos/Videos/"+id+"/HLS1M.m3u8";
+        ev.description = params.description;
+        ev.streamLinks = {
+            medium: "https://s3-us-west-2.amazonaws.com/atlasappeventvideos/Videos/"+id+"/HLS600k.m3u8",
+            high  : "https://s3-us-west-2.amazonaws.com/atlasappeventvideos/Videos/"+id+"/HLS1M.m3u8",
+        };
+        ev.thumbnailLink = "https://s3-us-west-2.amazonaws.com/dingo-event-video-thumbnails/Videos/"+id+"/1M00001.png";
 
         //call async
         setTimeout(function(){ sendVideoToAWS(id, tempFilePath); }, 0);
