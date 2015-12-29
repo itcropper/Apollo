@@ -8,8 +8,9 @@ var EventSchema = new Schema({
         index: '2dsphere'      // create the geospatial index 
     },
     streamLinks: {
-        high: String,
-        medium:String
+        smoothStream_high     : String,
+        httpLiveStream_high   : String,
+        httpLiveStream_medium :String
     },
     thumbnailLink : String,
     description : String,

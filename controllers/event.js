@@ -132,8 +132,9 @@ exports.createNew = function(req, res){
         ev.tags = params.tags;
         ev.description = params.description;
         ev.streamLinks = {
-            medium: "https://s3-us-west-2.amazonaws.com/atlasappeventvideos/Videos/"+id+"/HLS600k.m3u8",
-            high  : "https://s3-us-west-2.amazonaws.com/atlasappeventvideos/Videos/"+id+"/HLS1M.m3u8",
+            smoothStream_high    : "https://s3-us-west-2.amazonaws.com/atlasappeventvideos/Videos/"+id+"/ss1m.ismv",
+            httpLiveStream_medium: "https://s3-us-west-2.amazonaws.com/atlasappeventvideos/Videos/"+id+"/HLS600k.m3u8",
+            httpLiveStream_high  : "https://s3-us-west-2.amazonaws.com/atlasappeventvideos/Videos/"+id+"/HLS1M.m3u8",
         };
         ev.thumbnailLink = "https://s3-us-west-2.amazonaws.com/dingo-event-video-thumbnails/Videos/"+id+"/1M00001.png";
 

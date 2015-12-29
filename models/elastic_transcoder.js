@@ -1,8 +1,18 @@
-var AWS = require('aws-sdk');
+var AWS = require('aws-sdk'),
+    keys;
+
+try {
+    keys = require('../keys')();
+}catch (e){
+    console.log(e);
+    keys = {};
+}
+
+console.log(keys);
 
 AWS.config.update({
-    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID || keys.key || "",
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || keys.secret  || "",
     region: 'us-west-2'
 });
 
@@ -14,9 +24,8 @@ AWS.config.apiVersions = {
 var eltr = new AWS.ElasticTranscoder();
     
 
-exports.createAndRunAWSJob = function(InputKey, path){
+exports.createAndRunAWSJob = function(InputKey, path){ 
     
-    console.log("InputKey: ", InputKey);
     var params = {
         PipelineId: '1432231958337-41l3et',
         Input: {
@@ -29,6 +38,12 @@ exports.createAndRunAWSJob = function(InputKey, path){
         },
         OutputKeyPrefix: 'Videos/',
         Outputs: [
+            {
+              Key: InputKey + '/ss1m.ismv',
+              PresetId: '1351620000001-400040',
+              Rotate: 'auto',
+              SegmentDuration: '3'
+            },
             {
               Key: InputKey + '/HLS600k',
               PresetId: '1351620000001-200040',
@@ -46,6 +61,7 @@ exports.createAndRunAWSJob = function(InputKey, path){
         ]
 
     };
+    
     
     eltr.createJob(params, function(err, data) {
         if (err) {
