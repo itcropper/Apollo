@@ -9,7 +9,8 @@ var express = require('express'),
     session = require('express-session'),
     passport = require('passport'),
     eventController = require('./controllers/event'),
-    userController = require('./controllers/user'),
+    pocketController = require('./controllers/pocket-controller'),
+    userController = require('./controllers/user-controller'),
     authController = require('./controllers/auth'),
     oauth2Controller = require('./controllers/oauth2'),
     clientController = require('./controllers/client'),
@@ -54,21 +55,34 @@ app.use(passport.session());
 
 //event actions
 router.route('/events')
-    .get(eventController.getAll);
-router.get('/events/:id', authController.isAuthenticated, eventController.getOne);
-router.get('/events/:id/horns', authController.isAuthenticated, eventController.getAllHornsByUser);
-router.post('/event', eventController.createNew);
-router.put('/event', authController.isAuthenticated, eventController.update);
-router.delete('/event/:id',authController.isAuthenticated, eventController.delete);
+        .get(authController.isAuthenticated, eventController.getAll);
+
+router.route('/events/:id')
+        .get(authController.isAuthenticated, eventController.getOne)
+        .delete(authController.isAuthenticated, eventController.delete);
+
+router.route('/events/:id/horns')
+        .get(authController.isAuthenticated, eventController.getAllHornsByUser);
+
+router.route('/event')
+        .post(authController.isAuthenticated, eventController.createNew)
+        .put( authController.isAuthenticated, eventController.update);
+
+//pocket actions
+router.route('/pockets')
+        .post(authController.isAuthenticated, pocketController.createNewPocket)
+        .get( authController.isAuthenticated, pocketController.getMyPockets);
+
+router.route('/pockets/events/:id')
+        .get( authController.isAuthenticated, pocketController.getEventsFromPocket);
 
 //user actions
-//router.get('/user/:user_id', authController.isAuthenticated, userController.getUser);
-router.post('/user', userController.createNewUser);
-//router.put('/user/:user_id', authController.isAuthenticated, userController.updateUser);
+router.route('/users')
+  .post(userController.createNewUser);
+  //.get(userController.getUsers);
 
-//auth actions
-//router.get ('/oauth2/authorize', oauth2Controller.authorization);
-//router.post('/oauth2/authorize', authController.isAuthenticated, oauth2Controller.decision);
+router.route('/users/getOne')
+  .get(userController.getOneUser);
 
 app.use('/api/v1.1.0/', router); 
 

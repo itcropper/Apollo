@@ -1,6 +1,7 @@
 // Load required packages
-var User = require('../models/user'),
-    jsonResult = require('../jsonResult').Response;
+var User = require('../models/user-model'),
+    jsonResult = require('../jsonResult').Response,
+    url = require('url');
 
 // Create endpoint /api/users for POST
 exports.createNewUser = function(req, res) {
@@ -24,7 +25,6 @@ exports.createNewUser = function(req, res) {
     //else {res.send({"message": "must provide a valid email address" });}
 
     user.age = req.body.age;
-    user.gender = req.body.gender;
     user.password = req.body.password;
     
     user.save(function(err) {
@@ -37,6 +37,14 @@ exports.createNewUser = function(req, res) {
         res.json(jsonResult('Account Successfully Created', "success"));
     });
 }
+
+exports.getOneUser = function(req, res){
+    var params = url.parse(req.url, true).query;
+    console.log (params.id);
+    User.findOne({username: params.id}, function(err, user){
+        res.json(jsonResult(user));
+    });
+};
 
 // Create endpoint /api/users for GET
 exports.getUsers = function(req, res) {

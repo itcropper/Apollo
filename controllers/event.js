@@ -1,4 +1,4 @@
-var Event = require('../models/event'),
+var Event = require('../models/event-model'),
     bodyParser = require('body-parser'),
     express = require('express'), 
     app = express(),    

@@ -1,6 +1,6 @@
 // Load required packages
 var oauth2orize = require('oauth2orize')
-var User = require('../models/user');
+var User = require('../models/user-model');
 var Client = require('../models/client');
 var Token = require('../models/token');
 var Code = require('../models/code');

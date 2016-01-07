@@ -36,13 +36,13 @@ exports.createAndRunAWSJob = function(InputKey, path){
         },
         OutputKeyPrefix: 'Videos/',
         Outputs: [
-            {
-              Key: InputKey + '/HLS600k',
-              PresetId: '1351620000001-200040',
-              Rotate: 'auto',
-              SegmentDuration: '3',
-              ThumbnailPattern: InputKey + '/600k' + '{count}'
-            },
+//            {
+//              Key: InputKey + '/HLS600k',
+//              PresetId: '1351620000001-200040',
+//              Rotate: 'auto',
+//              SegmentDuration: '3',
+//              ThumbnailPattern: InputKey + '/600k' + '{count}'
+//            },
             {
               Key: InputKey + '/HLS1M',
               PresetId: '1351620000001-200030',

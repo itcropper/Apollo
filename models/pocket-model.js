@@ -4,8 +4,8 @@ var mongoose = require('mongoose'),
 var PocketSchema = new Schema({
     name: String,
     location    : {
-        type: { type: String }, 
-        coordinates: []
+        type: [Number] , 
+        index:'2d' 
     },
     address:     {
         street: String,
@@ -18,9 +18,14 @@ var PocketSchema = new Schema({
     events      : [String],
     name        : String,
     description : String,
-    radius      Number
+    radius      : Number
 });
 
 PocketSchema.index({ location : '2dsphere' });
+
+PocketSchema.pre('save', function(callback) {
+    this.created = new Date();
+    callback();
+});
 
 module.exports = mongoose.model('Pocket', PocketSchema);

@@ -50,6 +50,7 @@ UserSchema.pre('save', function(callback) {
     bcrypt.hash(user.password, salt, null, function(err, hash) {
       if (err) return callback(err);
       user.password = hash;
+      user.created = new Date();
       callback();
     });
   });
