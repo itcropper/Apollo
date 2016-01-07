@@ -20,7 +20,7 @@ var express = require('express'),
 
 
 //Port Variables
-var SERVER_PORT = Number(process.env.PORT || 3000);
+var SERVER_PORT = Number(process.env.PORT || 8000);
 var MONGOOSE_PORT =
   process.env.MONGOLAB_URI || 
   process.env.MONGOHQ_URL  || 
